@@ -6,31 +6,33 @@
 /*   By: asoursou <asoursou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 17:40:03 by asoursou          #+#    #+#             */
-/*   Updated: 2019/09/29 17:45:21 by asoursou         ###   ########.fr       */
+/*   Updated: 2019/10/19 20:44:13 by asoursou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <fcntl.h>
-#include <get_next_line.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "get_next_line_bonus.h"
 
 void	kill(char *s)
 {
 	int f;
 
 	f = open(s, O_RDONLY);
+	s = NULL;
 	if (get_next_line(f, &s) > 0)
 	{
-		ft_putendl(s);
+		printf("%s\n", s);
 		free(s);
 	}
 	close(f);
-	ft_putstr("killer: ");
-	ft_putnbr(get_next_line(f, &s));
-	ft_putstr("\nbuffer: ");
-	ft_putnbr(s != NULL);
-	ft_putchar('\n');
+	s = NULL;
+	printf("killer: %d\n", get_next_line(f, &s));
+	if (!s)
+		s = "(NULL)";
+	printf("buffer: %s$\n", s);
 }
 
 int		main(int argc, char **argv)

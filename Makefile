@@ -1,13 +1,19 @@
 # FILES
 GNL		= get_next_line
 NAME	= $(GNL)_bonus
-UTILS	= $(GNL)_utils
+UTILS	= $(GNL)_utils_bonus
+SRC		= cat.c \
+		  killer.c \
+		  multiple.c
+BIN		= $(SRC:%.c=%.out)
+SRC		= $(addprefix src/, $(SRC))
 
 # COMPILATION
+BZISE	?= 32
 CC		= gcc
-CFLAGS	= -g -Wall -Wextra -Werror -D BUFFER_SIZE=32
+CFLAGS	= -g -Wall -Wextra -Werror -D BUFFER_SIZE=$(BSIZE)
 
-all: main.out
+all: $(BIN)
 
 clean:
 	rm -rf *.out
