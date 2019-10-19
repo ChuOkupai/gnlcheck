@@ -6,12 +6,10 @@ SRC		= cat.c \
 		  killer.c \
 		  multiple.c
 BIN		= $(SRC:%.c=%.out)
-SRC		= $(addprefix src/, $(SRC))
 
 # COMPILATION
-BZISE	?= 32
 CC		= gcc
-CFLAGS	= -g -Wall -Wextra -Werror -D BUFFER_SIZE=$(BSIZE)
+CFLAGS	= -g -Wall -Wextra -Werror -D BUFFER_SIZE=32 -I.
 
 all: $(BIN)
 
@@ -22,7 +20,7 @@ fclean: clean
 
 re: fclean all
 
-%.out: %.c $(NAME).c $(UTILS).c $(NAME).h
+%.out: src/%.c $(NAME).c $(UTILS).c $(NAME).h
 	$(CC) $(CFLAGS) $(NAME).c $(UTILS).c $< -o $@
 
 .PHONY: clean fclean re
