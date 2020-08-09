@@ -6,7 +6,7 @@
 /*   By: asoursou <asoursou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 17:40:03 by asoursou          #+#    #+#             */
-/*   Updated: 2019/10/19 20:44:13 by asoursou         ###   ########.fr       */
+/*   Updated: 2020/08/09 13:18:37 by asoursou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,32 @@
 #include <unistd.h>
 #include "get_next_line_bonus.h"
 
-void	kill(char *s)
+void	kill(const char *path)
 {
-	int f;
+	char	*l;
+	int		f;
 
-	f = open(s, O_RDONLY);
-	s = NULL;
-	if (get_next_line(f, &s) > 0)
+	if (!(f = open(path, O_RDONLY)))
+		return ;
+	l = NULL;
+	if (get_next_line(f, &l) > 0)
 	{
-		printf("%s\n", s);
-		free(s);
+		printf("%s\n", l);
+		free(l);
 	}
 	close(f);
-	s = NULL;
-	printf("killer: %d\n", get_next_line(f, &s));
-	if (!s)
-		s = "(NULL)";
-	printf("buffer: %s$\n", s);
+	l = (char*)0xdeadbeef000000;
+	printf("killer: %d (%p)\n", get_next_line(f, &l), l);
+	if (l && l != (char*)0xdeadbeef000000)
+	{
+		printf("line: %s\n", l);
+		free(l);
+	}
 }
 
-int		main(int argc, char **argv)
+int		main(int ac, char **av)
 {
-	if (argc == 2)
-		kill(argv[1]);
+	if (ac == 2)
+		kill(av[1]);
 	return (0);
 }

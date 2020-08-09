@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   multiple.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asoursou <asoursou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/13 23:56:43 by asoursou          #+#    #+#             */
-/*   Updated: 2019/10/13 16:48:26 by asoursou         ###   ########.fr       */
+/*   Updated: 2020/08/09 13:10:06 by asoursou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int		open_all(int *f, int size, char **argv)
 {
 	int i;
 
-	i =-1;
+	i = -1;
 	while (++i < size)
 		if ((f[i] = open(argv[i], O_RDONLY)) < 0)
 		{
@@ -38,30 +38,29 @@ int		open_all(int *f, int size, char **argv)
 
 int		read_all(int *f, int size)
 {
-	char	*s;
+	char	*l;
 	int		i;
 	int		n;
 
-	i = 0;
+	i = -1;
 	n = 0;
-	while (i < size)
-	{
+	while (++i < size)
 		if (f[i])
 		{
-			if (get_next_line(f[i], &s) > 0)
+			if (get_next_line(f[i], &l) > 0)
 			{
-				printf("%s$\n", s);
-				free(s);
-				n++;
+				printf("|%s|\n", l);
+				free(l);
+				++n;
 			}
 			else
 			{
+				if (l)
+					free(l);
 				close(f[i]);
 				f[i] = 0;
 			}
 		}
-		i++;
-	}
 	return (n);
 }
 
@@ -73,6 +72,8 @@ int		main(int argc, char **argv)
 
 		if (!open_all(f, argc, argv + 1))
 			while (read_all(f, argc));
+		else
+			printf("error: Could not open files\n");
 	}
 	return (0);
 }

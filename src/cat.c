@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   cat.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asoursou <asoursou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/25 19:54:00 by asoursou          #+#    #+#             */
-/*   Updated: 2019/10/13 16:52:42 by asoursou         ###   ########.fr       */
+/*   Updated: 2020/08/09 13:17:20 by asoursou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,30 @@
 #include <unistd.h>
 #include "get_next_line_bonus.h"
 
-int	main(int argc, char **argv)
+int	main(int ac, char **av)
 {
-	char	*s;
+	char	*l;
 	int		f;
-	int		l;
+	int		n;
+	int		r;
 
-	if (argc == 2 && (f = open(argv[1], O_RDONLY)))
+	if (ac == 2 && (f = open(av[1], O_RDONLY)))
 	{
-		l = 1;
-		while (get_next_line(f, &s) > 0)
+		n = 0;
+		while ((r = get_next_line(f, &l)) == 1)
 		{
-			printf("%d\t: %s$\n", l++, s);
-			free(s);
+			printf("%3d: |%s|\n", ++n, l);
+			free(l);
 		}
+		if (r == -1)
+			printf("error: %p\n", l);
+		else if (!r)
+		{
+			printf("last: |%s|\n", l);
+			free(l);
+		}
+		else
+			printf("error: unknown return value\n");
 		close(f);
 	}
 	return (0);
